@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TechStore | Login</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+
+background:linear-gradient(120deg,#0d6efd,#4facfe);
+
+height:100vh;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+}
+
+.login-box{
+
+background:white;
+
+padding:40px;
+
+width:380px;
+
+border-radius:12px;
+
+box-shadow:0 10px 20px rgba(0,0,0,.3);
+
+}
+
+.login-box h2{
+
+text-align:center;
+
+margin-bottom:30px;
+
+color:#0d6efd;
+
+}
+
+.input-group{
+
+margin-bottom:20px;
+
+}
+
+.input-group label{
+
+display:block;
+
+margin-bottom:8px;
+
+font-weight:bold;
+
+}
+
+.input-group input{
+
+width:100%;
+
+padding:12px;
+
+border:1px solid #ccc;
+
+border-radius:6px;
+
+font-size:16px;
+
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+background:#0d6efd;
+
+color:white;
+
+font-size:18px;
+
+border:none;
+
+border-radius:6px;
+
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#084dbf;
+
+}
+
+.links{
+
+margin-top:20px;
+
+text-align:center;
+
+}
+
+.links a{
+
+text-decoration:none;
+
+color:#0d6efd;
+
+}
+
+.links p{
+
+margin-top:10px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<h2>Login</h2>
+
+<form onsubmit="return login()">
+
+<div class="input-group">
+
+<label>Email</label>
+
+<input type="email" id="email" placeholder="Enter Email" required>
+
+</div>
+
+<div class="input-group">
+
+<label>Password</label>
+
+<input type="password" id="password" placeholder="Enter Password" required>
+
+</div>
+
+<button type="submit">
+
+Login
+
+</button>
+
+</form>
+
+<div class="links">
+
+<a href="#">Forgot Password?</a>
+
+<p>
+
+Don't have an account?
+
+<a href="#">Register</a>
+
+</p>
+
+</div>
+
+</div>
+
+<script>
+
+async function login() {
+
+    event.preventDefault();
+
+    const username = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    console.log(username);
+    console.log(password);
+
+    try {
+
+        const response = await fetch("http://localhost:8081/api/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        });
+
+        console.log("Status:", response.status);
+
+        const text = await response.text();
+        console.log("Response:", text);
+
+        if (response.ok) {
+            alert("Login Successful");
+            window.location = "products.html";
+        } else {
+            alert("Login Failed");
+        }
+
+    } catch (e) {
+        console.error("Fetch Error:", e);
+    }
+
+    return false;
+}
+
+</script>
+
+</body>
+
+</html>
