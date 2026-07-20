@@ -34,5 +34,22 @@ public class UserService {
 
         return null;
     }
+    
+
+    public String register(User user){
+
+        User existing=repository.findByEmail(user.getEmail());
+
+        if(existing!=null){
+
+            return "Email Already Registered";
+
+        }
+
+        repository.save(user);
+
+        return "Registration Successful";
+
+    }
 
 }

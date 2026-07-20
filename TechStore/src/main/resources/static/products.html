@@ -149,79 +149,11 @@ footer{
 
 <div class="container">
 
-<div class="products">
+<div class="products" id="products">
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600">
-<div class="card-body">
-<h3>Gaming Laptop</h3>
-<p>Intel i7 • 16GB RAM • RTX Graphics</p>
-<div class="price">$10999</div>
-<button onclick="buy('Gaming Laptop','$999')">
-Buy Now
-</button>
-</div>
-</div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600">
-<div class="card-body">
-<h3>Smart Phone</h3>
-<p>6.7-inch AMOLED • 256GB Storage</p>
-<div class="price">$699</div>
-<button onclick="buy('Smart Phone','$699')">
-Buy Now
-</button>
-</div>
-</div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=600">
-<div class="card-body">
-<h3>Smart Watch</h3>
-<p>Heart Rate • GPS • Bluetooth Calling</p>
-<div class="price">$199</div>
-<button onclick="buy('Smart Watch','$199')">
-Buy Now
-</button>
-</div>
-</div>
 
-<div class="card">
-<img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?w=600">
-<div class="card-body">
-<h3>Wireless Headphones</h3>
-<p>Noise Cancellation • 30 Hours Battery</p>
-<div class="price">$149</div>
-<button onclick="buy('Wireless Headphones','$149')">
-Buy Now
-</button>
-</div>
-</div>
-
-<div class="card">
-<img src="C:\Users\Sai_K\Downloads\Benz_car_car_car.jpg">
-<div class="card-body">
-<h3>MacBook Pro</h3>
-<p>Apple M3 • 16GB RAM • 512GB SSD</p>
-<div class="price">$1599</div>
-<button onclick="buy('MacBook Pro','$1599')">
-Buy Now
-</button>
-</div>
-</div>
-
-<div class="card">
-<img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600">
-<div class="card-body">
-<h3>Premium Smart Watch</h3>
-<p>Water Resistant • AMOLED Display</p>
-<div class="price">$249</div>
-<button onclick="buy('Premium Smart Watch','$199')">
-Buy Now
-</button>
-</div>
-</div>
 
 </div>
 
@@ -233,12 +165,53 @@ Buy Now
 
 <script>
 
-function buy(product, price){
+async function loadProducts(){
 
-    localStorage.setItem("productName", product);
-    localStorage.setItem("productPrice", price);
+    const response = await fetch("/api/products");
 
-    window.location = "product-details.html";
+    const products = await response.json();
+
+    let html = "";
+
+    products.forEach(product=>{
+
+        html += `
+
+        <div class="card">
+
+            <img src="${product.imageUrl}">
+
+            <div class="card-body">
+
+                <h3>${product.productName}</h3>
+
+                <p>${product.description}</p>
+
+                <div class="price">$${product.price}</div>
+
+                <button onclick="buy(${product.id})">
+
+                    Buy Now
+
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById("products").innerHTML = html;
+
+}
+
+loadProducts();
+
+function buy(id){
+
+    window.location="product-details.html?id="+id;
 
 }
 

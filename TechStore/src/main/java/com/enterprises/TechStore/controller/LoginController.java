@@ -48,5 +48,22 @@ public class LoginController {
                 .body("Invalid Username or Password");
 
     }
+    
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody User user){
+
+        String message=service.register(user);
+
+        if(message.equals("Registration Successful")){
+
+            return ResponseEntity.ok(message);
+
+        }
+
+        return ResponseEntity
+                .badRequest()
+                .body(message);
+
+    }
 
 }

@@ -82,25 +82,20 @@ margin:auto;
 
 <h1>Product Details</h1>
 
-<img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600">
+<img id="productImage">
 
 <h2 id="name"></h2>
 
 <h3 id="price"></h3>
 
-<p>
+<p id="description"></p>
 
-This is one of our premium products.
-
-✔ High Quality
-
-✔ One Year Warranty
-
-✔ Fast Delivery
-
-✔ 7 Days Replacement
-
-</p>
+<ul>
+    <li>✔ High Quality</li>
+    <li>✔ One Year Warranty</li>
+    <li>✔ Fast Delivery</li>
+    <li>✔ 7 Days Replacement</li>
+</ul>
 
 <button onclick="checkout()">
 
@@ -112,15 +107,36 @@ Proceed to Checkout
 
 <script>
 
-document.getElementById("name").innerHTML=
-localStorage.getItem("productName");
+async function loadProduct(){
 
-document.getElementById("price").innerHTML=
-localStorage.getItem("productPrice");
+    // Get product id from URL
+    const params = new URLSearchParams(window.location.search);
+
+    const id = params.get("id");
+
+    console.log("Product Id:", id);
+
+    // Call Spring Boot API
+    const response = await fetch("/api/products/" + id);
+
+    const product = await response.json();
+
+    // Display values
+    document.getElementById("name").innerHTML = product.productName;
+
+    document.getElementById("price").innerHTML = "$" + product.price;
+
+    document.getElementById("description").innerHTML = product.description;
+
+    document.getElementById("productImage").src = product.imageUrl;
+
+}
+
+loadProduct();
 
 function checkout(){
 
-window.location="checkout.html";
+    window.location="checkout.html";
 
 }
 
