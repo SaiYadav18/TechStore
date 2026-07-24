@@ -16,26 +16,26 @@ pipeline {
 
         stage('Build') {
             steps {
-                bat 'mvn clean package -DskipTests'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build -t techstore:latest .'
+                sh 'docker build -t techstore:latest .'
             }
         }
 
         stage('Stop Old Container') {
             steps {
-                bat 'docker stop techstore || exit 0'
-                bat 'docker rm techstore || exit 0'
+                sh 'docker stop techstore || exit 0'
+                sh 'docker rm techstore || exit 0'
             }
         }
 
         stage('Run Container') {
             steps {
-                bat 'docker run -d --name techstore -p 8081:8081 techstore:latest'
+                sh 'docker run -d --name techstore -p 8081:8081 techstore:latest'
             }
         }
     }
