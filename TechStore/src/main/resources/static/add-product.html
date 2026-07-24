@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Add Product</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#f2f2f2;
+
+}
+
+.container{
+
+width:500px;
+
+margin:40px auto;
+
+background:white;
+
+padding:30px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+}
+
+h2{
+
+text-align:center;
+
+color:#0d6efd;
+
+margin-bottom:20px;
+
+}
+
+input,textarea{
+
+width:100%;
+
+padding:12px;
+
+margin-bottom:15px;
+
+border:1px solid #ccc;
+
+border-radius:5px;
+
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+background:#0d6efd;
+
+color:white;
+
+font-size:18px;
+
+border:none;
+
+cursor:pointer;
+
+border-radius:5px;
+
+}
+
+button:hover{
+
+background:#084298;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Add Product</h2>
+
+<form onsubmit="return saveProduct()">
+
+<input
+type="text"
+id="productName"
+placeholder="Product Name"
+required>
+
+<textarea
+id="description"
+placeholder="Description"
+required>
+</textarea>
+
+<input
+type="number"
+id="price"
+placeholder="Price"
+required>
+
+<label>Select Product Image</label>
+
+<input
+type="file"
+id="image"
+accept="image/*"
+required>
+
+<button>
+
+Save Product
+
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+async function saveProduct(){
+
+    event.preventDefault();
+
+    const formData = new FormData();
+
+    formData.append(
+        "productName",
+        document.getElementById("productName").value
+    );
+
+    formData.append(
+        "description",
+        document.getElementById("description").value
+    );
+
+    formData.append(
+        "price",
+        document.getElementById("price").value
+    );
+
+    formData.append(
+        "image",
+        document.getElementById("image").files[0]
+    );
+
+    const response = await fetch("/api/products",{
+
+        method:"POST",
+
+        body:formData
+
+    });
+
+    if(response.ok){
+
+        alert("Product Saved");
+
+        window.location="products.html";
+
+    }else{
+
+        alert("Error Saving Product");
+
+    }
+
+    return false;
+
+}
+
+</script>
+
+</body>
+
+</html>

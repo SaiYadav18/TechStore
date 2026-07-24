@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>My Profile</title>
+
+<style>
+
+body{
+
+font-family:Arial;
+
+background:#f2f2f2;
+
+}
+
+.container{
+
+width:600px;
+
+margin:50px auto;
+
+background:white;
+
+padding:30px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px gray;
+
+}
+
+h1{
+
+text-align:center;
+
+color:#0d6efd;
+
+margin-bottom:30px;
+
+}
+
+.row{
+
+margin:20px 0;
+
+font-size:20px;
+
+}
+
+label{
+
+font-weight:bold;
+
+display:inline-block;
+
+width:120px;
+
+}
+
+button{
+
+margin-top:30px;
+
+padding:12px 25px;
+
+background:#0d6efd;
+
+color:white;
+
+border:none;
+
+font-size:18px;
+
+cursor:pointer;
+
+border-radius:5px;
+
+}
+
+button:hover{
+
+background:#084298;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>My Profile</h1>
+
+<div class="row">
+
+<label>Name</label>
+
+<span id="name"></span>
+
+</div>
+
+<div class="row">
+
+<label>Email</label>
+
+<span id="email"></span>
+
+</div>
+
+<div class="row">
+
+<label>Phone</label>
+
+<span id="phone"></span>
+
+</div>
+
+<div class="row">
+
+<label>Address</label>
+
+<span id="address"></span>
+
+</div>
+
+<button onclick="editProfile()">
+
+Edit Profile
+
+</button>
+
+</div>
+
+<script>
+
+async function loadProfile() {
+
+    const id = localStorage.getItem("userId");
+
+    if (!id) {
+        alert("Please login first");
+        window.location = "login.html";
+        return;
+    }
+
+    try {
+
+        const response = await fetch("/api/users/" + id);
+
+        if (!response.ok) {
+            alert("Unable to load profile");
+            return;
+        }
+
+        const user = await response.json();
+
+        document.getElementById("name").innerHTML = user.name;
+        document.getElementById("email").innerHTML = user.email;
+        document.getElementById("phone").innerHTML = user.phone;
+        document.getElementById("address").innerHTML = user.address;
+
+    } catch (e) {
+        console.error(e);
+        alert("Something went wrong");
+    }
+
+}
+
+loadProfile();
+
+function editProfile(){
+
+    window.location="edit-profile.html";
+
+}
+
+</script>
+
+</body>
+
+</html>

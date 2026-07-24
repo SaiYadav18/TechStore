@@ -13,6 +13,80 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
+
+/* Pagination */
+#pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin:50px 0;
+    flex-wrap:wrap;
+}
+
+#pagination button{
+
+    min-width:45px;
+    height:45px;
+
+    border:1px solid #ddd;
+    border-radius:10px;
+
+    background:white;
+    color:#333;
+
+    font-size:16px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:0.3s;
+
+    padding:0 15px;
+}
+
+/* Hover */
+#pagination button:hover{
+
+    background:#0d6efd;
+    color:white;
+    border-color:#0d6efd;
+
+}
+
+/* Active Page */
+#pagination button.active{
+
+    background:#dc3545;
+    color:white;
+    border:none;
+
+}
+
+/* Previous / Next */
+#pagination button.nav-btn{
+
+    color:#777;
+    background:#fff;
+    border:1px solid #ddd;
+    min-width:100px;
+
+}
+
+#pagination button.nav-btn:hover{
+
+    background:#0d6efd;
+    color:white;
+
+}
+
+#pagination button:disabled{
+
+    opacity:.5;
+    cursor:not-allowed;
+
+}
+
 body{
     background:#f4f6f9;
 }
@@ -101,7 +175,8 @@ nav a:hover{
     margin-bottom:15px;
 }
 
-button{
+.card button{
+
     width:100%;
     padding:12px;
     background:#0d6efd;
@@ -110,11 +185,15 @@ button{
     border-radius:5px;
     cursor:pointer;
     font-size:16px;
+
 }
 
-button:hover{
+.card button:hover{
+
     background:#084298;
+
 }
+
 
 footer{
     background:#222;
@@ -122,6 +201,15 @@ footer{
     text-align:center;
     padding:20px;
     margin-top:50px;
+}
+
+#pagination button.active{
+    background:#dc3545;
+    color:white;
+}
+
+#pagination .nav-btn{
+    min-width:110px;
 }
 </style>
 
@@ -135,6 +223,7 @@ footer{
 <nav>
     <a href="index.html">Home</a>
     <a href="products.html">Products</a>
+    <a href="add-product.html">Add Product</a>
     <a href="dashboard.html">Dashboard</a>
     <a href="profile.html">Profile</a>
     <a href="login.html">Logout</a>
@@ -151,13 +240,11 @@ footer{
 
 <div class="products" id="products">
 
-
-
-
-
 </div>
 
 </div>
+
+<div id="pagination" style="text-align:center;margin:30px;"></div>
 
 <footer>
 <p>© 2026 TechStore | All Rights Reserved</p>
@@ -165,21 +252,26 @@ footer{
 
 <script>
 
-async function loadProducts(){
+let currentPage = 0;
+const pageSize = 4;
 
-    const response = await fetch("/api/products");
+async function loadProducts(page = 0) {
 
-    const products = await response.json();
+    currentPage = page;
+
+    const response = await fetch(`/api/products?page=${page}&size=${pageSize}`);
+
+    const data = await response.json();
 
     let html = "";
 
-    products.forEach(product=>{
+    data.content.forEach(product => {
 
         html += `
 
         <div class="card">
 
-            <img src="${product.imageUrl}">
+            <img src="/uploads/${product.imageUrl}">
 
             <div class="card-body">
 
@@ -205,13 +297,56 @@ async function loadProducts(){
 
     document.getElementById("products").innerHTML = html;
 
+    renderPagination(data.totalPages);
+
+}
+
+function renderPagination(totalPages){
+
+    let html = "";
+
+    // Previous Button
+    html += `
+        <button
+            class="nav-btn"
+            ${currentPage==0 ? "disabled" : ""}
+            onclick="loadProducts(${currentPage-1})">
+            ❮ Previous
+        </button>
+    `;
+
+    // Page Numbers
+    for(let i=0;i<totalPages;i++){
+
+        html += `
+            <button
+                class="${i===currentPage ? 'active' : ''}"
+                onclick="loadProducts(${i})">
+                ${i+1}
+            </button>
+        `;
+
+    }
+
+    // Next Button
+    html += `
+        <button
+            class="nav-btn"
+            ${currentPage==totalPages-1 ? "disabled" : ""}
+            onclick="loadProducts(${currentPage+1})">
+            Next ❯
+        </button>
+    `;
+
+    document.getElementById("pagination").innerHTML = html;
+
 }
 
 loadProducts();
 
 function buy(id){
 
-    window.location="product-details.html?id="+id;
+    window.location = "product-details.html?id=" + id;
 
 }
 

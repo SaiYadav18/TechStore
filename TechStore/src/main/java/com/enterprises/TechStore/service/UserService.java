@@ -51,5 +51,10 @@ public class UserService {
         return "Registration Successful";
 
     }
+    
+    public User getUser(Integer id) {
+    	
+    	return repository.findById(id).orElse(null);
+    }
 
 }

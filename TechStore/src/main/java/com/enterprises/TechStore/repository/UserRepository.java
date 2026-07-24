@@ -7,7 +7,7 @@ import com.enterprises.TechStore.entity.User;
 
 @Repository
 public interface UserRepository
-        extends JpaRepository<User,Long>{
+        extends JpaRepository<User,Integer>{
 
     User findByEmail(String email);
 
