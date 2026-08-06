@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.enterprises.TechStore.entity.User;
+import com.enterprises.TechStore.jwt.JwtService;
 import com.enterprises.TechStore.repository.UserRepository;
 
 @Service
@@ -11,6 +12,9 @@ public class UserService {
 
     @Autowired
     UserRepository repository;
+    
+    @Autowired
+    JwtService jwtService;
 
     public User login(String email, String password) {
 
@@ -26,9 +30,24 @@ public class UserService {
 
             if(user.getPassword().equals(password)) {
                 System.out.println("Password Matched");
+                
+                String accessToken = jwtService.generateAccessToken(
+                        user.getEmail()
+                );
+                
+                user.setToken(accessToken);
+
+                String refreshToken = jwtService.generateRefreshToken(
+                		user.getEmail()
+                );
+                
+                user.setRefeshToken(refreshToken);
+                
                 return user;
             }
         }
+        
+        
 
         System.out.println("Login Failed");
 

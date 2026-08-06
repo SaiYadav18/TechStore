@@ -25,7 +25,29 @@ public class User {
 
     private String address;
     
-    @Column(unique=true)
+    private String token;
+    
+    private String refeshToken;
+    
+    
+    
+    public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getRefeshToken() {
+		return refeshToken;
+	}
+
+	public void setRefeshToken(String refeshToken) {
+		this.refeshToken = refeshToken;
+	}
+
+	@Column(unique=true)
     private String email;
 
     private String role;

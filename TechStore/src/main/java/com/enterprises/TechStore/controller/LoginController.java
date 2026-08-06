@@ -17,7 +17,7 @@ import com.enterprises.TechStore.service.UserService;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://127.0.0.1:5500")
+//@CrossOrigin(origins = "http://127.0.0.1:5500")
 public class LoginController {
 
     @Autowired
@@ -28,6 +28,30 @@ public class LoginController {
     	
     	return "saikohli-v1";
     }
+    
+    @GetMapping("/getname1")
+    public String getName1() {
+    	
+    	return "saikohli-v2";
+    }
+    
+
+//    @PostMapping("/login")
+//    public void  login123(@RequestBody LoginRequest request){
+//    	
+//    	System.out.println("request :"+request.toString());
+////
+////        User user = service.login(
+////                request.getUsername(),
+////                request.getPassword());
+//
+////        if(user!=null){
+//
+////            return ResponseEntity.ok(request);
+//
+////        }
+//
+//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){

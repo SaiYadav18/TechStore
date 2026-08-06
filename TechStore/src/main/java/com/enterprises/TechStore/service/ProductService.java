@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.enterprises.TechStore.entity.Product;
+import com.enterprises.TechStore.exception.ProductNotFoundException;
 import com.enterprises.TechStore.repository.ProductRepository;
 
 @Service
@@ -25,7 +26,8 @@ public class ProductService {
 
 	public Product getProduct(int id) {
 
-		return repository.findById(id).orElse(null);
+		return repository.findById(id).orElseThrow(() ->
+        new ProductNotFoundException("Product not found with id : " + id));
 
 	}
 
@@ -40,6 +42,16 @@ public class ProductService {
 		
 		return repository.findAll(pageable);
 		
+	}
+	
+	public Page<Product> searchProducts(String keyword, Pageable pageable) {
+
+	    return repository
+	            .findByProductNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(
+	                    keyword,
+	                    keyword,
+	                    pageable);
+
 	}
 
 }

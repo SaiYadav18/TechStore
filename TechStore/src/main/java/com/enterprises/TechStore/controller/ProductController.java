@@ -8,7 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -83,5 +87,27 @@ public class ProductController {
 	public Page<Product> getProduct(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "4") int size){
 		
 		return service.getProduct(page, size);
+	}
+	
+	@GetMapping("/products/{id}")
+	public Product getProduct(@PathVariable int id) {
+		
+		return service.getProduct(id);
+	}
+	
+	@GetMapping("/search")
+	public ResponseEntity<Page<Product>> searchProducts(
+
+	        @RequestParam String keyword,
+
+	        @RequestParam(defaultValue = "0") int page,
+
+	        @RequestParam(defaultValue = "4") int size) {
+
+	    Pageable pageable = PageRequest.of(page, size);
+
+	    Page<Product> products = service.searchProducts(keyword, pageable);
+
+	    return ResponseEntity.ok(products);
 	}
 }
