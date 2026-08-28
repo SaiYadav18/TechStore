@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -22,10 +24,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.enterprises.TechStore.entity.Product;
 import com.enterprises.TechStore.service.ProductService;
 
+import jakarta.transaction.Transactional;
+
 
 @RestController
 @RequestMapping("/api")
 public class ProductController {
+	
+	private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
 	@Autowired
 	ProductService service;
@@ -109,5 +115,16 @@ public class ProductController {
 	    Page<Product> products = service.searchProducts(keyword, pageable);
 
 	    return ResponseEntity.ok(products);
+	}
+	
+	@GetMapping("/test-connection")
+	@Transactional
+	public String testConnection() throws InterruptedException {
+
+		service.getAllProducts();
+
+	    Thread.sleep(100000);
+
+	    return "Connection released";
 	}
 }

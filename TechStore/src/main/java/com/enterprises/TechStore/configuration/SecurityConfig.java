@@ -15,41 +15,29 @@ import com.enterprises.TechStore.jwt.JwtAuthenticationFilter;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
-	
+
 	@Autowired
 	private CustomAccessDeniedHandler accessDeniedHandler;
-	
+
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
 
-        http
-        	.csrf(csrf -> csrf.disable())
-        	.sessionManagement( session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        	)
-        	.authorizeHttpRequests(auth -> auth
-        			.requestMatchers(
-                                "/auth/register",
-                                "/api/login",
-                                "api/products",
-                                "/auth/refresh"
-        					).permitAll()
-        			.anyRequest().authenticated()).exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
-//        	.httpBasic(Customizer.withDefaults());
-        	.addFilterBefore(
-                    jwtAuthenticationFilter,
-                    UsernamePasswordAuthenticationFilter.class
-            );
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        return http.build();
-    }
+		http.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/register", "/api/login", "api/products",
+						"api/test-connection", "/auth/refresh", "/actuator/**").permitAll().anyRequest()
+						.authenticated())
+				.exceptionHandling(exception -> exception.accessDeniedHandler(accessDeniedHandler))
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+		return http.build();
+	}
 }
-

@@ -1,5 +1,7 @@
 package com.enterprises.TechStore.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,8 @@ import com.enterprises.TechStore.repository.UserRepository;
 
 @Service
 public class UserService {
+	
+	private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     UserRepository repository;
@@ -43,6 +47,8 @@ public class UserService {
                 
                 user.setRefeshToken(refreshToken);
                 
+                log.info("User logged in successfully --> ",user.getName());
+                
                 return user;
             }
         }
@@ -66,6 +72,8 @@ public class UserService {
         }
 
         repository.save(user);
+        
+        log.info("User Registered successfully",user.getName());
 
         return "Registration Successful";
 
