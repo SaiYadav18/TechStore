@@ -71,6 +71,8 @@ public class ProductController {
 	    System.out.println("Upload Dir : " + uploadDir);
 
 	    System.out.println("Folder Exists : " + new File(uploadDir).exists());
+	    
+	    System.out.print("hello");
 
 	    System.out.println("Absolute Path : " + new File(uploadDir).getAbsolutePath());
 
